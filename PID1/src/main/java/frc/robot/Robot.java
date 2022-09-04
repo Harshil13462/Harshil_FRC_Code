@@ -24,8 +24,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
+
+  // Declaring all of the variables that will be used in the code
   private Command m_autonomousCommand;
-  final double MAX = 0.3;
   double error;
   double prev_error;
   double speed;
@@ -45,6 +46,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+
+    // sets the variables to their required values and puts the robot on Coast mode so it doesnt change speed to fast
     m_rightDrive.setInverted(true);
     m_leftDrive.setIdleMode(CANSparkMax.IdleMode.kCoast);
     m_rightDrive.setIdleMode(CANSparkMax.IdleMode.kCoast);
@@ -80,6 +83,8 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+
+    // initializes timer/encoders
     m_timer.reset();
     m_timer.start();
     m_encoder.setPosition(0);
@@ -89,34 +94,43 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    // repeats until the encoder reaches the desired value
     if (Math.abs(m_encoder.getPosition()) < Math.abs(Constants.distance)) {
+      // evaluates error and rate of change
       error = (Constants.distance / 36 - m_encoder.getPosition() / 36);
       rate_of_change = (prev_error - error) / 20;
       
+      // makes sure that the speed doesn't increase/decrease too fast
       prev_speed = speed;
       speed = Constants.KP * error + rate_of_change * Constants.KD;
-      if (speed - prev_speed > 0.01) {
-        speed = prev_speed + 0.01;
+      if (speed - prev_speed > Constants.MAX_ROC) {
+        speed = prev_speed + Constants.MAX_ROC;
       }
-      if (speed - prev_speed < -0.01) {
-        speed = prev_speed - 0.01;
+      if (speed - prev_speed < -1 * Constants.MAX_ROC) {
+        speed = prev_speed - Constants.MAX_ROC;
       }
 
-      if (Math.abs(speed) > MAX) {
+      // Makes sure that the robot doesn't move too fast
+      if (Math.abs(speed) > Constants.MAX_SPEED) {
         if (speed > 0) {
-          speed = MAX;
+          speed = Constants.MAX_SPEED;
         }
         else {
-          speed = -1 * MAX;
+          speed = -1 * Constants.MAX_SPEED;
         }
       }
+
+      // Sets the speeds
       m_leftDrive.set(speed);
       m_rightDrive.set(speed);
       
-      SmartDashboard.putNumber("Percentage: ", m_encoder.getPosition() / Constants.distance);
-      prev_error = error;
+      
+      SmartDashboard.putNumber("Percentage: ", m_encoder.getPosition() / Constants.distance); // Displays the robot info on the Dashboard
+      
+      prev_error = error; // Saves this error value for use in the next iteration
     }
     else {
+      // stops the robot as soon as it reaches the target
       m_leftDrive.set(0);
       m_rightDrive.set(0);
     }

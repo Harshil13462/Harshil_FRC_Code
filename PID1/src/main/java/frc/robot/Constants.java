@@ -14,8 +14,10 @@ package frc.robot;
  */
 public final class Constants {
 
-    public static final double KP = 1;
-    public static final double distance = -216;
-    public static final double KD = 1.05;
+    public static final double KP = 1; // KP Constant Value
+    public static final double distance = -216; // Distance that it needs to travel (negative = backwards)
+    public static final double KD = 1.05; // KD Constant value
+    public static final double MAX_SPEED = 0.3; // Maximum speed
+    public static final double MAX_ROC = 0.01; // Maximum rate of change to make sure that the robot doesn't accelerate/decelerate too fast
     
 }
