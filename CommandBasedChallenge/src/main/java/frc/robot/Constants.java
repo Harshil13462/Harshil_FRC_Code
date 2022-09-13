@@ -13,30 +13,12 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final int LEFT_FRONT = 0;
-    public static final int RIGHT_FRONT = 1;
-    public static final int LEFT_BACK = 2;
-    public static final int RIGHT_BACK = 3;
-    public static final int SHOOTER = 4;
-    public static final int INTAKE = 5;
-    
-    public static final int RANGE_FINDER = 0;
-
-
-    public static final int XBOX_LEFT_Y_AXIS = 1;
-    public static final int XBOX_LEFT_X_AXIS = 0;
-    public static final int RIGHT_TRIGGER = 3;
-
-
-    public static final double DRIVETRAINSPEED = 0.7;
     public static final double AUTONOMOUS_SPEED = 0.4;
     public static final double DRIVE_FORWARD_TIME = 3.0;
-    public static final int JOYSTICK_NUMBER = 0;
-    public static final double SHOOTER_SPEED = 0.5;
-    public static final double INTAKE_SPEED = 0.7;
-    public static final int CAMERA_RES_X = 320;
-    public static final int CAMERA_RES_Y = 240;
-    public static final double AUTO_SHOOT_TIME = 2.0;
-    public static final double SETPOINT_FORWARD = 1.5;
+    public static final double KP = 1; // KP Constant Value
+    public static final double distance = -216; // Distance that it needs to travel (negative = backwards)
+    public static final double KD = 1.05; // KD Constant value
+    public static final double MAX_SPEED = 0.3; // Maximum speed
+    public static final double MAX_ROC = 0.01; // Maximum rate of change to make sure that the robot doesn't accelerate/decelerate too fast
 }
 
