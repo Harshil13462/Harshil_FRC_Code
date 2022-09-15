@@ -6,14 +6,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.DriveForwardTimed;
-import frc.robot.commands.DrivePID;
+import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeTimed;
 import frc.robot.commands.ShooterDistance;
 import frc.robot.commands.ShooterTimed;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,24 +26,19 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveTrain driveTrain;
-  private final DriveForwardTimed driveForwardTimed;
-  private final DrivePID drivePID;
+
   private final Shooter shooter;
   private final ShooterDistance shootDistance;
   private final ShooterTimed shootTimed;
   private final Intake intake;
   private final IntakeTimed intakeTimed;
+  private XboxController controller = new XboxController(0);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     driveTrain = new DriveTrain();
 
-    driveForwardTimed = new DriveForwardTimed(driveTrain);
-    driveForwardTimed.addRequirements(driveTrain);
-
-    drivePID = new DrivePID(driveTrain);
-    drivePID.addRequirements(driveTrain);
     
     shooter = new Shooter();
     
@@ -69,7 +62,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    JoystickButton intakeButton = new JoystickButton(controller, XboxController.Button.kA.value);
+    intakeButton.whenPressed(new IntakeTimed(intake));
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -78,6 +74,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return driveForwardTimed;
+    return new IntakeTimed(intake);
   }
 }

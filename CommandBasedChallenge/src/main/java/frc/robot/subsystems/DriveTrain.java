@@ -4,23 +4,47 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase {
-  private final CANSparkMax m_leftDrive = new CANSparkMax(7, MotorType.kBrushless);
-  private final CANSparkMax m_rightDrive = new CANSparkMax(5, MotorType.kBrushless);
-  private final RelativeEncoder m_encoder = m_leftDrive.getEncoder();
+  private final WPI_TalonFX rightFront = new WPI_TalonFX(1);
+  private final WPI_TalonFX rightBack = new WPI_TalonFX(2);
+  private final WPI_TalonFX leftFront = new WPI_TalonFX(3);
+  private final WPI_TalonFX leftBack = new WPI_TalonFX(4);
+
+  private MotorControllerGroup rightMotors = new MotorControllerGroup(rightFront, rightBack);
+  private MotorControllerGroup leftMotors = new MotorControllerGroup(leftFront, leftBack);  
+  private DifferentialDrive drive = new DifferentialDrive(rightMotors, leftMotors);
+
   // SpeedControllerGroup leftMotors;
   // SpeedControllerGroup rightMotors;
 
   /** Creates a new DriveTrain. */
   public DriveTrain() {
-    
+    rightFront.configFactoryDefault();
+    leftFront.configFactoryDefault();
+    rightBack.configFactoryDefault();
+    leftBack.configFactoryDefault();
+
+    rightFront.setNeutralMode(NeutralMode.Brake);
+    leftFront.setNeutralMode(NeutralMode.Brake);
+    rightBack.setNeutralMode(NeutralMode.Brake);
+    leftBack.setNeutralMode(NeutralMode.Brake);
+
+    rightBack.follow(rightFront);
+    leftBack.follow(leftFront);
+
+    rightMotors.setInverted(false);
+    leftMotors.setInverted(true);
   }
 
   @Override
@@ -28,21 +52,15 @@ public class DriveTrain extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void driveForward(double speed) {
-    m_leftDrive.set(speed);
-    m_rightDrive.set(speed);
-  }
-  
-  public double getEncoder() {
-    return m_encoder.getPosition();
+  public void arcadeDrive(double speed, double rotation, double power) {
+    drive.arcadeDrive(speed * power, rotation * power);
   }
 
-  public boolean driveToDistance(double setPointDistance, double speed) {
-    return true;
+  public void tankDrive(double left, double right, double power) {
+    drive.tankDrive(left * power, right * power);
   }
 
   public void stop() {
-    m_leftDrive.set(0);
-    m_rightDrive.set(0);
+    drive.stopMotor();
   }
 }
