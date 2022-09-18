@@ -57,7 +57,7 @@ public class DrivePID extends CommandBase {
       dt.DriveForward(speed);
       
       
-      System.out.println("Percentage: " + dt.m_encoder.getPosition() / Constants.distance); // Displays the robot info on the Dashboard
+      SmartDashboard.putNumber("Harshil Percentage: ", dt.m_encoder.getPosition() / Constants.distance);
       
       prev_error = error;
     }

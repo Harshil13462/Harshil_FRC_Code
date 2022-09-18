@@ -23,8 +23,8 @@ public class DriveWithController extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    dt.m_leftDrive.set(-1 * (dt.m_stick.getY() + dt.m_stick.getX()));
-    dt.m_rightDrive.set(-1 * (dt.m_stick.getY() - dt.m_stick.getX()));
+    dt.m_leftDrive.set(-1 * (dt.m_stick.getY() - dt.m_stick.getX()));
+    dt.m_rightDrive.set(-1 * (dt.m_stick.getY() + dt.m_stick.getX()));
   }
 
   // Called once the command ends or is interrupted.
