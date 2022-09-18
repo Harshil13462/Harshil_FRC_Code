@@ -16,4 +16,9 @@ public final class Constants {
     public static final int LEFT_DRIVE = 7;
     public static final int RIGHT_DRIVE = 5;
     public static final int JOYSTICK_MOTOR = 0;
+    public static final double MAX_SPEED = 0.5;
+    public static final double MAX_ROC = 0.02;
+    public static final double KD = 1.05;
+    public static final double KP = 1;
+    public static final int distance = -216;
 }

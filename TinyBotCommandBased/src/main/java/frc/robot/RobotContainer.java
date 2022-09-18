@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.DrivePID;
 import frc.robot.commands.DriveWithController;
 import frc.robot.subsystems.DriveTrain;
 
@@ -19,11 +20,21 @@ import frc.robot.subsystems.DriveTrain;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveTrain driveTrain;
+  private final DriveWithController driveWithController;
+  private final DrivePID drivePID;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     driveTrain = new DriveTrain();
     configureButtonBindings();
+
+    driveWithController = new DriveWithController(driveTrain);
+    driveWithController.addRequirements(driveTrain);
+
+    drivePID = new DrivePID(driveTrain);
+    drivePID.addRequirements(driveTrain);
+
+    driveTrain.setDefaultCommand(driveWithController);
   }
 
   /**
@@ -41,6 +52,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new DriveWithController(driveTrain);
+    return drivePID;
   }
 }
